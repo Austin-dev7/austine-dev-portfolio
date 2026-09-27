@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Austine Dev | Creative Developer</title>
+<meta name="description" content="Austine Dev — Creative Developer building fast web experiences with Python, JavaScript and modern frontend tools." />
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&family=Space+Grotesk:wght@400;600;700&display=swap');
+:root { --red: #e63946; }
+html { scroll-behavior: auto; } body { font-family: 'Montserrat', sans-serif; background: #0a0a0f; color: #fff; overflow-x: hidden; cursor: none; }
+h1,h2,h3 { font-family: 'Space Grotesk', sans-serif; }
+::selection { background: var(--red); color: #fff; }
+::-webkit-scrollbar { width: 6px; }::-webkit-scrollbar-track { background: #0a0a0f; }::-webkit-scrollbar-thumb { background: var(--red); border-radius: 3px; }
+#cursor { position: fixed; width: 12px; height: 12px; border-radius: 50%; background: var(--red); pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); mix-blend-mode: difference; }
+#cursor-ring { position: fixed; width: 38px; height: 38px; border-radius: 50%; border: 1.5px solid rgba(230,57,70,.6); pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); }
+.cursor-hover #cursor { width: 26px; height: 26px; background: #fff; }.cursor-hover #cursor-ring { width: 60px; height: 60px; border-color: rgba(255,255,255,.9); }
+@media (hover: none) { #cursor, #cursor-ring { display: none; } body { cursor: auto; } }
+#preloader { position: fixed; inset: 0; background: #0a0a0f; z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+#load-count { font-family: 'Space Grotesk'; font-size: clamp(4rem, 15vw, 9rem); font-weight: 700; }
+#load-bar { width: 220px; height: 2px; background: #222; margin-top: 20px; overflow: hidden; }#load-bar span { display: block; height: 100%; width: 0%; background: var(--red); }
+.nav-link { position: relative; letter-spacing: 3px; font-weight: 400; font-size: 13px; transition: color.3s; }
+.nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -6px; left: 0; background: var(--red); transition: width.35s cubic-bezier(.65,0,.35,1); }
+.nav-link:hover { color: var(--red); }.nav-link:hover::after,.nav-active::after { width: 100%; }
+#hero-canvas { position: absolute; inset: 0; z-index: 0; }
+.outline-text { -webkit-text-stroke: 2.5px var(--red); color: transparent; }.glow-red { text-shadow: 0 0 40px rgba(230,57,70,.55); }
+.hero-grad { position: absolute; inset: 0; z-index: 1; pointer-events: none; background: radial-gradient(ellipse at center, transparent 30%, rgba(10,10,15,.85) 100%); }
+.marquee { overflow: hidden; white-space: nowrap; }.marquee-inner { display: inline-block; animation: scrollX 22s linear infinite; }@keyframes scrollX { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.tilt { transform-style: preserve-3d; transition: box-shadow.4s; will-change: transform; }.tilt:hover { box-shadow: 0 30px 80px rgba(230,57,70,.25); }
+.tilt.shine { position: absolute; inset: 0; border-radius: inherit; pointer-events: none; background: radial-gradient(600px circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,.12), transparent 45%); opacity: 0; transition: opacity.3s; z-index: 2; }.tilt:hover.shine { opacity: 1; }
+.project-num { font-family: 'Space Grotesk'; font-size: 4.5rem; font-weight: 700; opacity:.12; line-height: 1; }
+.banner { height: 170px; display: flex; align-items: center; justify-content: center; font-size: 4rem; position: relative; overflow: hidden; }
+.banner::before { content:''; position:absolute; inset:0; background-image: radial-gradient(rgba(255,255,255,.14) 1px, transparent 1px); background-size: 18px 18px; }
+.banner span { position: relative; filter: drop-shadow(0 8px 20px rgba(0,0,0,.5)); }
+.banner-b1 { background: linear-gradient(135deg,#7f1d1d,#e63946 60%,#ff8fa3); }.banner-b2 { background: linear-gradient(135deg,#78350f,#f59e0b 60%,#fde68a); }
+.banner-b3 { background: linear-gradient(135deg,#1e3a8a,#3b82f6 60%,#93c5fd); }.banner-b4 { background: linear-gradient(135deg,#0c4a6e,#0ea5e9 60%,#a5f3fc); }
+.banner-b5 { background: linear-gradient(135deg,#4c1d95,#8b5cf6 60%,#c4b5fd); }.banner-b6 { background: linear-gradient(135deg,#14532d,#22c55e 60%,#86efac); }
+.magnet { display: inline-block; transition: transform.2s ease-out; }.reveal { opacity: 0; }
+.skill-fill { width: 0%; background: linear-gradient(90deg, var(--red), #ff7b8a); }
+.glow-input { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.12); transition: border-color.3s, box-shadow.3s; }
+.glow-input:focus { outline: none; border-color: var(--red); box-shadow: 0 0 0 3px rgba(230,57,70,.18); }
+#mobile-menu { transition: opacity.35s ease, visibility.35s; }
+.melt-wrap { position: relative; display: inline-block; overflow: visible; }
+.melt-chrome { position: relative; background: linear-gradient(110deg, #fff 0%, #fff 25%, #e63946 30%, #ff8fa3 35%, #fff 40%, #fff 60%, #e63946 70%, #fff 75%, #fff 100%); background-size: 300% auto; -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-stroke: 2.8px transparent; animation: chromeFlow 3s linear infinite; filter: drop-shadow(0 0 20px rgba(230,57,70,.7)) drop-shadow(0 0 50px rgba(230,57,70,.35)); }
+.melt-chrome::before { content: attr(data-text); position: absolute; left: 0; top: 0; width: 100%; -webkit-text-stroke: 3px var(--red); color: transparent; filter: blur(1px); opacity:.8; z-index: -1; }
+.melt-chrome::after { content: attr(data-text); position: absolute; left: 2px; top: 1px; width: 100%; -webkit-text-stroke: 3px rgba(255,255,255,.15); color: transparent; z-index: -2; animation: glitchMelt.25s infinite linear alternate-reverse; }
+@keyframes chromeFlow { to { background-position: 300% center; } }
+@keyframes glitchMelt { 0% { transform: translate(0,0); } 50% { transform: translate(-1px,1px); } 100% { transform: translate(1px,-1px); } }
+.drips { position: absolute; left: 0; top: 75%; width: 100%; height: 60px; pointer-events: none; overflow: visible; z-index: 5; }
+.drip { position: absolute; width: 3px; background: linear-gradient(to bottom, var(--red), rgba(230,57,70,0)); border-radius: 0 0 10px 10px; animation: dripFall 4s ease-in infinite; opacity: 0; }
+@keyframes dripFall { 0% { height: 0; transform: translateY(0); opacity: 0; } 10% { opacity: 1; height: 8px; } 80% { height: 35px; opacity:.8; } 100% { transform: translateY(25px); height: 0; opacity: 0; } }
+.smoke { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; z-index: 4; }
+.smoke i { position: absolute; bottom: -10px; width: 18px; height: 18px; background: radial-gradient(circle, rgba(255,255,255,.15) 0%, rgba(230,57,70,.15) 40%, transparent 70%); border-radius: 50%; filter: blur(2px); animation: smokeUp 5s ease-out infinite; opacity: 0; }
+@keyframes smokeUp { 0% { transform: translateY(0) translateX(0) scale(.5); opacity: 0; } 15% { opacity:.6; } 100% { transform: translateY(-120px) translateX(20px) scale(2.5); opacity: 0; } }
+.magic-build { background: linear-gradient(90deg, #fff, #e63946, #ff8fa3, #e63946, #fff); background-size: 200% auto; -webkit-background-clip: text; background-clip: text; color: transparent; animation: chromeFlow 3.5s linear infinite; filter: drop-shadow(0 0 20px rgba(230,57,70,.6)); }
+.red-letter { color: var(--red); -webkit-text-fill-color: var(--red); -webkit-background-clip: initial; background-clip: initial; background: none; text-shadow: 0 0 20px rgba(230,57,70,.8); }
+.contact-box { background: #fff; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,.06); padding: 22px; display: flex; align-items: center; gap: 18px; transition: all.35s cubic-bezier(.65,0,.35,1); cursor: pointer; }
+.contact-box:hover { filter: brightness(.92); transform: translateY(-6px) scale(.98); box-shadow: 0 20px 50px rgba(0,0,0,.14); opacity:.9; }
+.contact-icon { width: 54px; height: 54px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+</style>
+<base target="_blank">
+</head>
+<body class="antialiased">
+<!-- Custom Cursor Elements -->
+<div id="cursor-ring"></div><div id="cursor"></div>
+<!-- Preloader / Page Loading Animation -->
+<div id="preloader"><div id="load-count">0%</div><div id="load-bar"><span></span></div></div>
+
+<!-- ================= HEADER / NAVIGATION ================= -->
+<header class="fixed top-0 left-0 w-full z-50 px-6 lg:px-14 py-5 flex justify-between items-center backdrop-blur-md bg-black/30">
+  <a href="#home" class="nav-scroll text-2xl font-bold tracking-[3px]">AUSTINE <span class="text-[#e63946]">DEV</span></a>
+  <nav class="hidden md:flex gap-10"><a href="#home" class="nav-link nav-active nav-scroll">HOME</a><a href="#services" class="nav-link nav-scroll">SERVICES</a><a href="#projects" class="nav-link nav-scroll">PROJECTS</a><a href="#about" class="nav-link nav-scroll">ABOUT</a><a href="#contact" class="nav-link nav-scroll">CONTACT</a></nav>
+  <button id="menu-btn" class="md:hidden text-3xl z-50 relative" aria-label="Menu">☰</button>
+</header>
+<div id="mobile-menu" class="fixed inset-0 bg-[#0a0a0f] z-40 flex-col items-center justify-center gap-10 text-2xl opacity-0 invisible flex"><a href="#home" class="nav-link nav-scroll">HOME</a><a href="#services" class="nav-link nav-scroll">SERVICES</a><a href="#projects" class="nav-link nav-scroll">PROJECTS</a><a href="#about" class="nav-link nav-scroll">ABOUT</a><a href="#contact" class="nav-link nav-scroll">CONTACT</a></div>
+
+<!-- ================= HERO SECTION ================= -->
+<section id="home" class="relative h-screen flex items-center overflow-hidden">
+  <canvas id="hero-canvas"></canvas><div class="hero-grad"></div>
+  <div class="relative z-10 px-8 lg:px-20 w-full">
+    <p class="hero-el text-[#e63946] tracking-[6px] text-sm mb-4 font-semibold">// CREATIVE DEVELOPER</p>
+    <h2 class="hero-el text-4xl md:text-6xl lg:text-7xl font-bold mb-1 h-[1.2em]"><span id="line1"></span><span id="caret1" class="animate-pulse text-[#e63946]">|</span></h2>
+    <h2 class="hero-el text-4xl md:text-6xl lg:text-7xl font-bold mb-3 h-[1.2em]"><span id="line2"></span><span id="caret2" class="animate-pulse text-[#e63946] hidden">|</span></h2>
+    <h1 class="hero-el text-6xl md:text-8xl lg:text-9xl font-extrabold mb-4 h-[1.15em] melt-wrap"><span id="line3"></span><span id="magic-austine" class="melt-chrome hidden font-extrabold" data-text="AUSTINE">AUSTINE</span><span id="caret3" class="animate-pulse text-[#e63946]">|</span><div class="drips" id="drips-austine"></div><div class="smoke" id="smoke-austine"></div></h1>
+    <p class="hero-el max-w-xl text-gray-400 mb-10 leading-relaxed">I build <span class="text-white font-semibold">fast, immersive web experiences</span> — from algorithm-powered engines to real-time data apps. Python in the back of my mind, pixels in the front.</p>
+    <div class="hero-el flex flex-wrap gap-5"><a href="#projects" class="nav-scroll magnet border-2 border-[#e63946] px-10 py-4 tracking-widest font-semibold hover:bg-[#e63946] transition-colors duration-300">VIEW MY WORK</a><a href="#contact" class="nav-scroll magnet px-10 py-4 tracking-widest font-semibold text-gray-300 hover:text-[#e63946] transition-colors duration-300">GET IN TOUCH →</a></div>
+  </div>
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 text-gray-500 text-xs tracking-widest">SCROLL<div class="w-[1px] h-12 bg-gradient-to-b from-[#e63946] to-transparent animate-pulse"></div></div>
+</section>
+
+<!-- Tech Stack Marquee -->
+<div class="marquee py-6 border-y border-white/10 bg-[#0d0d14]"><div class="marquee-inner text-2xl font-bold tracking-widest text-gray-700"><span class="mx-8">PYTHON</span><span class="text-[#e63946] mx-2">✦</span><span class="mx-8">JAVASCRIPT</span><span class="text-[#e63946] mx-2">✦</span><span class="mx-8">TAILWIND CSS</span><span class="text-[#e63946] mx-2">✦</span><span class="mx-8">FLASK</span><span class="text-[#e63946] mx-2">✦</span><span class="mx-8">SQLITE</span><span class="text-[#e63946] mx-2">✦</span><span class="mx-8">DATA STRUCTURES</span><span class="text-[#e63946] mx-2">✦</span><span class="mx-8">GRAPH ALGORITHMS</span><span class="text-[#e63946] mx-2">✦</span><span class="mx-8">THREE.JS</span><span class="text-[#e63946] mx-2">✦</span></div></div>
+
+<!-- ================= SERVICES SECTION - PROFESSIONAL & CLIENT-FOCUSED ================= -->
+<!-- This section highlights real shipped projects with benefit-driven copy to attract clients -->
+<section id="services" class="py-28 px-6 lg:px-14 max-w-7xl mx-auto">
+  <p class="reveal text-[#e63946] tracking-[6px] text-sm mb-3 font-semibold">// WHAT I DO</p>
+  <h2 class="reveal text-5xl lg:text-6xl font-bold mb-6 melt-wrap"><span class="melt-chrome" data-text="SERVICES">SERV<span class="red-letter">I</span>CES</span><div class="drips" id="drips-services"></div><div class="smoke" id="smoke-services"></div></h2>
+  <p class="reveal max-w-3xl text-gray-400 leading-relaxed mb-16">Real skills from <span class="text-white font-semibold">real shipped projects</span> — every service below is something I've actually built and deployed.</p>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <!-- Service Card 1: Responsive Web Design - Focus on UX and business growth -->
+    <div class="reveal tilt relative rounded-2xl overflow-hidden bg-gradient-to-br from-[#15151f] to-[#0d0d14] border border-white/10 group"><div class="shine"></div><div class="p-8 min-h-[340px] flex flex-col"><div class="w-14 h-14 rounded-2xl bg-[#e63946]/15 flex items-center justify-center text-2xl mb-8 group-hover:bg-[#e63946] group-hover:scale-110 transition-all duration-300">🎨</div><h3 class="font-bold text-lg mb-3">RESPONSIVE WEB DESIGN</h3><p class="text-sm text-gray-400 leading-relaxed">Crafting websites that adapt seamlessly to any device, ensuring an optimal user experience and boosting your online presence. Pixel-perfect, mobile-first builds with semantic HTML & Tailwind — <span class="text-gray-200">like my Mama Put restaurant site</span>.</p></div></div>
+    <!-- Service Card 2: Live Data & API Apps - Focus on engagement and real-time value -->
+    <div class="reveal tilt relative rounded-2xl overflow-hidden bg-gradient-to-br from-[#15151f] to-[#0d0d14] border border-white/10 group"><div class="shine"></div><div class="p-8 min-h-[340px] flex flex-col"><div class="w-14 h-14 rounded-2xl bg-[#e63946]/15 flex items-center justify-center text-2xl mb-8 group-hover:bg-[#e63946] group-hover:scale-110 transition-all duration-300">🌦️</div><h3 class="font-bold text-lg mb-3">LIVE DATA & API APPS</h3><p class="text-sm text-gray-400 leading-relaxed">Building fast, dynamic dashboards that fetch and display real-time data to keep users engaged and informed. Turning complex APIs into simple, beautiful interfaces — <span class="text-gray-200">like my WeatherNow app with live forecasts</span>.</p></div></div>
+    <!-- Service Card 3: Algorithms & Optimization - Focus on performance and solving complex problems -->
+    <div class="reveal tilt relative rounded-2xl overflow-hidden bg-gradient-to-br from-[#15151f] to-[#0d0d14] border border-white/10 group"><div class="shine"></div><div class="p-8 min-h-[340px] flex flex-col"><div class="w-14 h-14 rounded-2xl bg-[#e63946]/15 flex items-center justify-center text-2xl mb-8 group-hover:bg-[#e63946] group-hover:scale-110 transition-all duration-300">🧠</div><h3 class="font-bold text-lg mb-3">ALGORITHMS & OPTIMIZATION</h3><p class="text-sm text-gray-400 leading-relaxed">Tailoring high-performance solutions that solve complex problems at lightning speed. From graph engines searching 5000+ nodes in ~O(1) to sorting visualizers — <span class="text-gray-200">where performance and efficiency is my obsession</span>.</p></div></div>
+    <!-- Service Card 4: Full-Stack Apps - Focus on end-to-end solution and business innovation -->
+    <div class="reveal tilt relative rounded-2xl overflow-hidden bg-gradient-to-br from-[#15151f] to-[#0d0d14] border border-white/10 group"><div class="shine"></div><div class="p-8 min-h-[340px] flex flex-col"><div class="w-14 h-14 rounded-2xl bg-[#e63946]/15 flex items-center justify-center text-2xl mb-8 group-hover:bg-[#e63946] group-hover:scale-110 transition-all duration-300">🗄️</div><h3 class="font-bold text-lg mb-3">FULL-STACK APPS</h3><p class="text-sm text-gray-400 leading-relaxed">End-to-end applications that bring your ideas to life — from database to deployment. Scalable, secure and maintainable solutions with Flask, SQLite & JavaScript — <span class="text-gray-200">like my Study Planner managing tasks and deadlines</span>.</p></div></div>
+  </div>
+</section>
+
+<!-- ================= PROJECTS SECTION ================= -->
+<section id="projects" class="py-28 px-6 lg:px-14 max-w-7xl mx-auto">
+  <p class="reveal text-[#e63946] tracking-[6px] text-sm mb-3 font-semibold">// SELECTED WORK</p>
+  <h2 class="reveal text-5xl lg:text-6xl font-bold mb-16 melt-wrap"><span class="melt-chrome" data-text="PROJECTS">PRO<span class="red-letter">J</span>ECTS</span><div class="drips" id="drips-projects"></div><div class="smoke" id="smoke-projects"></div></h2>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <!-- Project 1 -->
+    <div class="reveal tilt relative rounded-2xl overflow-hidden bg-gradient-to-br from-[#15151f] to-[#0d0d14] border border-white/10 group"><div class="shine"></div><div class="banner banner-b1"><span>🕸️</span><span class="project-num absolute top-3 right-5">01</span></div><div class="p-7"><h3 class="text-xl font-bold mb-3 group-hover:text-[#e63946] transition-colors">CSV Search Engine</h3><p class="text-sm text-gray-400 leading-relaxed mb-5">Graph-powered engine that finds paths across 5000+ nodes in ~O(1) using direct parent mapping. Python algorithm, live in your browser.</p><div class="flex flex-wrap gap-2 mb-6 text-[11px] tracking-wider text-gray-500"><span class="px-2 py-1 border border-white/10 rounded">PYTHON</span><span class="px-2 py-1 border border-white/10 rounded">GRAPHS</span><span class="px-2 py-1 border border-white/10 rounded">JAVASCRIPT</span></div><div class="flex gap-4 text-sm font-semibold tracking-wider"><a href="https://csv-search-engine.vercel.app" target="_blank" rel="noopener" class="text-[#e63946] hover:underline">LIVE DEMO ↗</a><a href="https://github.com/Austin-dev7/CSV_Search_Engine" target="_blank" rel="noopener" class="text-gray-400 hover:text-white transition-colors">GITHUB</a></div></div></div>
+    <!-- Project 2 -->
+    <div class="reveal tilt relative rounded-2xl overflow-hidden bg-gradient-to-br from-[#15151f] to-[#0d0d14] border border-white/10 group"><div class="shine"></div><div class="banner banner-b2"><span>🍲</span><span class="project-num absolute top-3 right-5">02</span></div><div class="p-7"><h3 class="text-xl font-bold mb-3 group-hover:text-[#e63946] transition-colors">Mama Put Restaurant</h3><p class="text-sm text-gray-400 leading-relaxed mb-5">Responsive restaurant website for authentic Nigerian home-cooked meals — menu showcase, delivery info and WhatsApp ordering.</p><div class="flex flex-wrap gap-2 mb-6 text-[11px] tracking-wider text-gray-500"><span class="px-2 py-1 border border-white/10 rounded">HTML</span><span class="px-2 py-1 border border-white/10 rounded">TAILWIND</span><span class="px-2 py-1 border border-white/10 rounded">RESPONSIVE</span></div><div class="flex gap-4 text-sm font-semibold tracking-wider"><a href="https://mama-put-website.vercel.app" target="_blank" rel="noopener" class="text-[#e63946] hover:underline">LIVE DEMO ↗</a><a href="https://github.com/Austin-dev7/mama-put-website" target="_blank" rel="noopener" class="text-gray-400 hover:text-white transition-colors">GITHUB</a></div></div></div>
+    <!-- Project 3 -->
+    <div class="reveal tilt relative rounded-2xl overflow-hidden bg-gradient-to-br from-[#15151f] to-[#0d0d14] border border-white/10 group"><div class="shine"></div><div class="banner banner-b3"><span>📚</span><span class="project-num absolute top-3 right-5">03</span></div><div class="p-7"><h3 class="text-xl font-bold mb-3 group-hover:text-[#e63946] transition-colors">Study Planner</h3><p class="text-sm text-gray-400 leading-relaxed mb-5">Full-featured planner built with Flask & SQLite — task tracking, notes, deadline management and progress visualization.</p><div class="flex flex-wrap gap-2 mb-6 text-[11px] tracking-wider text-gray-500"><span class="px-2 py-1 border border-white/10 rounded">FLASK</span><span class="px-2 py-1 border border-white/10 rounded">SQLITE</span><span class="px-2 py-1 border border-white/10 rounded">JAVASCRIPT</span></div><div class="flex gap-4 text-sm font-semibold tracking-wider"><a href="https://github.com/Austin-dev7/study-planner" target="_blank" rel="noopener" class="text-[#e63946] hover:underline">VIEW CODE ↗</a></div></div></div>
+    <!-- Project 4 -->
+    <div class="reveal tilt relative rounded-2xl overflow-hidden bg-gradient-to-br from-[#15151f] to-[#0d0d14] border border-white/10 group"><div class="shine"></div><div class="banner banner-b4"><span>🌤️</span><span class="project-num absolute top-3 right-5">04</span></div><div class="p-7"><h3 class="text-xl font-bold mb-3 group-hover:text-[#e63946] transition-colors">WeatherNow App</h3><p class="text-sm text-gray-400 leading-relaxed mb-5">Live weather dashboard — search any city for real-time conditions, wind speed and forecasts, powered by a weather API.</p><div class="flex flex-wrap gap-2 mb-6 text-[11px] tracking-wider text-gray-500"><span class="px-2 py-1 border border-white/10 rounded">JAVASCRIPT</span><span class="px-2 py-1 border border-white/10 rounded">REST API</span><span class="px-2 py-1 border border-white/10 rounded">CSS</span></div><div class="flex gap-4 text-sm font-semibold tracking-wider"><a href="https://github.com/Austin-dev7/Weather-App" target="_blank" rel="noopener" class="text-[#e63946] hover:underline">VIEW CODE ↗</a></div></div></div>
+    <!-- Project 5 -->
+    <div class="reveal tilt relative rounded-2xl overflow-hidden bg-gradient-to-br from-[#15151f] to-[#0d0d14] border border-white/10 group"><div class="shine"></div><div class="banner banner-b5"><span>📊</span><span class="project-num absolute top-3 right-5">05</span></div><div class="p-7"><h3 class="text-xl font-bold mb-3 group-hover:text-[#e63946] transition-colors">Sorting Visualizer</h3><p class="text-sm text-gray-400 leading-relaxed mb-5">Interactive visualization of Bubble, Selection and Quick Sort — watch algorithms work in real-time with animated bars.</p><div class="flex flex-wrap gap-2 mb-6 text-[11px] tracking-wider text-gray-500"><span class="px-2 py-1 border border-white/10 rounded">JAVASCRIPT</span><span class="px-2 py-1 border border-white/10 rounded">ALGORITHMS</span><span class="px-2 py-1 border border-white/10 rounded">CANVAS</span></div><div class="flex gap-4 text-sm font-semibold tracking-wider"><a href="https://github.com/Austin-dev7/Sorting-Visualizer" target="_blank" rel="noopener" class="text-[#e63946] hover:underline">VIEW CODE ↗</a></div></div></div>
+    <!-- Project 6 -->
+    <div class="reveal tilt relative rounded-2xl overflow-hidden bg-gradient-to-br from-[#15151f] to-[#0d0d14] border border-white/10 group"><div class="shine"></div><div class="banner banner-b6"><span>📝</span><span class="project-num absolute top-3 right-5">06</span></div><div class="p-7"><h3 class="text-xl font-bold mb-3 group-hover:text-[#e63946] transition-colors">Stack Text Editor</h3><p class="text-sm text-gray-400 leading-relaxed mb-5">Undo/redo text editor powered by the LIFO stack data structure — a deep dive into how real text editors work under the hood.</p><div class="flex flex-wrap gap-2 mb-6 text-[11px] tracking-wider text-gray-500"><span class="px-2 py-1 border border-white/10 rounded">PYTHON</span><span class="px-2 py-1 border border-white/10 rounded">STACKS</span><span class="px-2 py-1 border border-white/10 rounded">DSA</span></div><div class="flex gap-4 text-sm font-semibold tracking-wider"><a href="https://github.com/Austin-dev7/stack-text-editor" target="_blank" rel="noopener" class="text-[#e63946] hover:underline">VIEW CODE ↗</a></div></div></div>
+  </div>
+  <div class="reveal text-center mt-14"><a href="https://github.com/Austin-dev7?tab=repositories" target="_blank" rel="noopener" class="magnet inline-block border-2 border-white/20 px-10 py-4 tracking-widest font-semibold hover:border-[#e63946] hover:text-[#e63946] transition-colors">SEE ALL PROJECTS ON GITHUB →</a></div>
+</section>
+
+<!-- ================= ABOUT SECTION ================= -->
+<section id="about" class="py-28 px-6 lg:px-14 max-w-7xl mx-auto">
+  <div class="grid lg:grid-cols-2 gap-16 items-center">
+    <div>
+      <p class="reveal text-[#e63946] tracking-[6px] text-sm mb-3 font-semibold">// ABOUT ME</p>
+      <h2 class="reveal text-5xl font-bold mb-8">BUILDER.<br>THINKER.<br><span class="text-[#e63946]">PROBLEM SOLVER.</span></h2>
+      <p class="reveal text-gray-400 leading-relaxed mb-6">I'm <span class="text-white font-semibold">Austine</span> — a developer obsessed with how things work under the hood. I don't just write code; I engineer systems. From graph algorithms that search 5000 nodes in microseconds, to 3D web experiences that make people stop scrolling.</p>
+      <p class="reveal text-gray-400 leading-relaxed mb-10">Every project in my portfolio was <span class="text-white font-semibold">designed, built and deployed by me</span> — from the first line of code to the live URL.</p>
+      <div class="reveal grid grid-cols-3 gap-6 mb-10">
+        <div class="text-center border border-white/10 rounded-2xl py-6"><div class="text-3xl font-bold text-[#e63946] counter" data-target="15">0</div><div class="text-xs text-gray-500 tracking-widest mt-1">PROJECTS BUILT</div></div>
+        <div class="text-center border border-white/10 rounded-2xl py-6"><div class="text-3xl font-bold text-[#e63946]"><span class="counter" data-target="5000">0</span>+</div><div class="text-xs text-gray-500 tracking-widest mt-1">NODES SEARCHED</div></div>
+        <div class="text-center border border-white/10 rounded-2xl py-6"><div class="text-3xl font-bold text-[#e63946] counter" data-target="8">0</div><div class="text-xs text-gray-500 tracking-widest mt-1">TECHNOLOGIES</div></div>
+      </div>
+      <div class="reveal space-y-5 mb-10">
+        <div><div class="flex justify-between text-sm mb-2"><span class="font-semibold">HTML / CSS / Tailwind</span><span class="text-gray-500">90%</span></div><div class="h-[6px] bg-white/10 rounded overflow-hidden"><div class="skill-fill h-full rounded" data-w="90%"></div></div></div>
+        <div><div class="flex justify-between text-sm mb-2"><span class="font-semibold">JavaScript</span><span class="text-gray-500">80%</span></div><div class="h-[6px] bg-white/10 rounded overflow-hidden"><div class="skill-fill h-full rounded" data-w="80%"></div></div></div>
+        <div><div class="flex justify-between text-sm mb-2"><span class="font-semibold">Python & Algorithms</span><span class="text-gray-500">85%</span></div><div class="h-[6px] bg-white/10 rounded overflow-hidden"><div class="skill-fill h-full rounded" data-w="85%"></div></div></div>
+        <div><div class="flex justify-between text-sm mb-2"><span class="font-semibold">Flask / SQLite</span><span class="text-gray-500">70%</span></div><div class="h-[6px] bg-white/10 rounded overflow-hidden"><div class="skill-fill h-full rounded" data-w="70%"></div></div></div>
+      </div>
+      <a href="./resume.pdf" target="_blank" rel="noopener" class="reveal magnet inline-block border-2 border-[#e63946] px-10 py-4 tracking-widest font-semibold hover:bg-[#e63946] transition-colors">VIEW MY RESUME ↗</a>
+    </div>
+
+    <!-- ABOUT RIGHT SIDE WITH PROFILE IMAGE -->
+    <div class="reveal relative">
+      <div class="absolute -inset-4 bg-[#e63946]/20 blur-3xl rounded-full"></div>
+      <div class="relative flex justify-center mb-8">
+        <img src="./images/young-money.jpeg" alt="Young Money" onerror="this.src='./images/Young Money.jpeg'"
+            class="w-[170px] h-[170px] md:w-[190px] md:h-[190px] object-cover rounded-full border-[4px] border-[#e63946] shadow-[0_0_40px_rgba(230,57,70,.45)]" />
+      </div>
+      <div class="relative rounded-3xl border border-white/10 p-10 bg-gradient-to-br from-[#15151f] to-[#0d0d14]">
+        <p class="text-6xl text-[#e63946] font-bold mb-6">&ldquo;</p>
+        <p class="text-xl leading-relaxed text-gray-300 mb-6">First solve the problem. Then, write the code.</p>
+        <p class="text-gray-500 text-sm tracking-widest">— JOHNSON JOHNSON (PARAPHRASED) — THE DEVELOPER'S CREED</p>
+        <div class="mt-8 pt-8 border-t border-white/10 grid gap-3 text-sm">
+          <a href="tel:+2349119329899" class="flex items-center gap-3 text-gray-400 hover:text-[#e63946] transition-colors">📞 +234 911 932 9899</a>
+          <a href="mailto:nwobiaugustineebuka@gmail.com" class="flex items-center gap-3 text-gray-400 hover:text-[#e63946] transition-colors">✉️ nwobiaugustineebuka@gmail.com</a>
+          <a href="https://github.com/Austin-dev7" target="_blank" rel="noopener" class="flex items-center gap-3 text-gray-400 hover:text-[#e63946] transition-colors">💻 github.com/Austin-dev7</a>
+          <a href="https://www.linkedin.com/in/austine-dev7-069a28431" target="_blank" rel="noopener" class="flex items-center gap-3 text-gray-400 hover:text-[#e63946] transition-colors">🔗 linkedin.com/in/austine-dev7</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTACT SECTION ================= -->
+<section id="contact" class="py-28 px-6 lg:px-14 max-w-4xl mx-auto text-center">
+  <p class="reveal text-[#e63946] tracking-[6px] text-sm mb-3 font-semibold">// SAY HELLO</p>
+  <h2 class="reveal text-5xl lg:text-7xl font-bold mb-6 melt-wrap"><span class="block">LET'S BUILD</span><span class="magic-build" data-text="SOMETHING GREAT">SOMETHING <span class="outline-text" style="-webkit-text-stroke:1.5px #e63946; color:transparent; background:none;">GREAT</span></span><div class="drips" id="drips-build"></div><div class="smoke" id="smoke-build"></div></h2>
+  <p class="reveal text-gray-400 mb-14 max-w-xl mx-auto">Have a project in mind, a question about my work, or just want to connect? Send a message straight to my WhatsApp.</p>
+  <form id="wa-form" class="reveal grid gap-5 text-left max-w-2xl mx-auto"><input type="text" id="wa-name" placeholder="Your Name" required class="glow-input rounded-lg px-5 py-4 w-full" /><input type="text" id="wa-msg" placeholder="Your Message (e.g. I have a project for you)" required class="glow-input rounded-lg px-5 py-4 w-full" /><button type="submit" class="magnet bg-[#e63946] hover:bg-[#c92a35] transition-colors py-4 rounded-lg font-bold tracking-widest flex items-center justify-center gap-3"><span class="text-xl">💬</span> SEND VIA WHATSAPP</button></form>
+</section>
+
+<!-- ================= CONTACT INFO BOXES ================= -->
+<section class="py-16 px-6 lg:px-14 max-w-7xl mx-auto bg-[#f5f5f7]">
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="contact-box"><div class="contact-icon bg-[#fff0e6]">📞</div><div><p class="text-gray-900 font-semibold">Phone</p><p class="text-sm text-gray-500">+234 911 932 9899</p></div></div>
+    <div class="contact-box"><div class="contact-icon bg-[#e6f0ff]">✉️</div><div><p class="text-gray-900 font-semibold">Email</p><p class="text-[12px] text-gray-500 break-all">nwobiaugustineebuka@gmail.com</p></div></div>
+    <div class="contact-box"><div class="contact-icon bg-[#fff7e0]">📍</div><div><p class="text-gray-900 font-semibold">Address</p><p class="text-sm text-gray-500">Lagos, Nigeria</p></div></div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="bg-[#0d1b2a] py-14 px-6 text-center border-t border-white/5">
+  <h2 class="text-2xl md:text-3xl font-bold tracking-widest mb-2"><span class="text-[#e63946]">A</span>USTINE <span class="text-[#e63946]">D</span>EV</h2>
+  <p class="text-gray-300 text-sm tracking-wide mb-6">Your Complete Web Solution</p>
+  <div class="flex justify-center gap-4 mb-8">
+    <a href="https://www.instagram.com/" target="_blank" rel="noopener" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#e63946] transition-colors">📸</a>
+    <a href="https://github.com/Austin-dev7" target="_blank" rel="noopener" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#e63946] transition-colors">G</a>
+    <a href="https://www.linkedin.com/in/austine-dev7-069a28431" target="_blank" rel="noopener" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#e63946] transition-colors">in</a>
+    <a href="https://x.com/" target="_blank" rel="noopener" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#e63946] transition-colors">𝕏</a>
+  </div>
+  <div class="text-gray-500 text-xs tracking-widest">© 2026 Austine Dev. All Rights Reserved.</div>
+</footer>
+
+<script>
+// ================= CURSOR ANIMATION =================
+const cursor=document.getElementById('cursor');const ring=document.getElementById('cursor-ring');let mx=innerWidth/2,my=innerHeight/2,rx=mx,ry=my;
+addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
+(function ringLoop(){rx+=(mx-rx)*.15;ry+=(my-ry)*.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(ringLoop);})();
+document.querySelectorAll('a,button,input,textarea').forEach(el=>{el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-hover'));el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-hover'));});
+
+// ================= PRELOADER LOGIC =================
+const countEl=document.getElementById('load-count');const barEl=document.querySelector('#load-bar span');let load=0;
+const loadInt=setInterval(()=>{load+=Math.floor(Math.random()*12)+3;if(load>=100){load=100;clearInterval(loadInt);finishLoad();}countEl.textContent=load+'%';barEl.style.width=load+'%';},90);
+function finishLoad(){gsap.to('#preloader',{opacity:0,duration:.7,delay:.3,onComplete:()=>{document.getElementById('preloader').style.display='none';gsap.from('.hero-el',{y:50,opacity:0,stagger:.12,duration:1,ease:'power3.out'});runTyping();}});}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+async function typeText(lineEl,caretEl,text,speed){caretEl.classList.remove('hidden');for(const ch of text){lineEl.textContent+=ch;await sleep(speed);}caretEl.classList.add('hidden');}
+async function runTyping(){await typeText(document.getElementById('line1'),document.getElementById('caret1'),'Hello,',75);await typeText(document.getElementById('line2'),document.getElementById('caret2'),'My name is',60);await typeText(document.getElementById('line3'),document.getElementById('caret3'),'AUSTINE',130);const magic=document.getElementById('magic-austine');const line3=document.getElementById('line3');setTimeout(()=>{line3.style.display='none';magic.classList.remove('hidden');gsap.fromTo(magic,{scale:0.8,opacity:0},{scale:1,opacity:1,duration:0.8,ease:'back.out(2)'});initMelting();},300);}
+function initMelting(){['austine','services','projects','build'].forEach(id=>{const dripBox=document.getElementById('drips-'+id);const smokeBox=document.getElementById('smoke-'+id);if(!dripBox) return;for(let i=0;i<9;i++){const d=document.createElement('div');d.className='drip';d.style.left=(8+Math.random()*84)+'%';d.style.animationDelay=(Math.random()*3)+'s';d.style.animationDuration=(2+Math.random()*2.5)+'s';dripBox.appendChild(d);}for(let i=0;i<10;i++){const s=document.createElement('i');s.style.left=(10+Math.random()*80)+'%';s.style.animationDelay=(Math.random()*4)+'s';s.style.animationDuration=(4+Math.random()*2)+'s';smokeBox.appendChild(s);}});}
+function smoothTo(id){const target=document.querySelector(id);if(!target)return;window.scrollTo({top:target.offsetTop-60,behavior:'smooth'});}
+document.querySelectorAll('.nav-scroll').forEach(a=>{a.addEventListener('click',e=>{const href=a.getAttribute('href');if(href&&href.startsWith('#')){e.preventDefault();smoothTo(href);closeMobileMenu();}});});
+const sections=['home','services','projects','about','contact'];
+addEventListener('scroll',()=>{let current='home';sections.forEach(id=>{const el=document.getElementById(id);if(el&&scrollY>=el.offsetTop-200)current=id;});document.querySelectorAll('.nav-link').forEach(l=>{l.classList.toggle('nav-active',l.getAttribute('href')==='#'+current);});});
+const menuBtn=document.getElementById('menu-btn');const mobileMenu=document.getElementById('mobile-menu');let menuOpen=false;
+function openMobileMenu(){menuOpen=true;mobileMenu.classList.remove('opacity-0','invisible');menuBtn.textContent='✕';document.body.style.overflow='hidden';}
+function closeMobileMenu(){menuOpen=false;mobileMenu.classList.add('opacity-0','invisible');menuBtn.textContent='☰';document.body.style.overflow='';}
+menuBtn.addEventListener('click',()=>menuOpen?closeMobileMenu():openMobileMenu());
+const canvas=document.getElementById('hero-canvas');const scene=new THREE.Scene();const camera=new THREE.PerspectiveCamera(75,innerWidth/innerHeight,.1,1000);camera.position.z=55;
+const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+const COUNT=2500;const positions=new Float32Array(COUNT*3);const colors=new Float32Array(COUNT*3);
+const cRed=new THREE.Color('#e63946'),cWhite=new THREE.Color('#8899aa');
+for(let i=0;i<COUNT;i++){const r=8+Math.random()*45;const angle=(i/COUNT)*Math.PI*4+Math.random()*.5;positions[i*3]=Math.cos(angle)*r+(Math.random()-.5)*6;positions[i*3+1]=(Math.random()-.5)*(60-r*.6);positions[i*3+2]=Math.sin(angle)*r+(Math.random()-.5)*6;const c=Math.random()<.25?cRed:cWhite;colors[i*3]=c.r;colors[i*3+1]=c.g;colors[i*3+2]=c.b;}
+const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.BufferAttribute(positions,3));geo.setAttribute('color',new THREE.BufferAttribute(colors,3));
+const mat=new THREE.PointsMaterial({size:.28,vertexColors:true,transparent:true,opacity:.9,depthWrite:false});const points=new THREE.Points(geo,mat);scene.add(points);
+let tx=0,ty=0;addEventListener('mousemove',e=>{tx=(e.clientX/innerWidth-.5)*2;ty=(e.clientY/innerHeight-.5)*2;});
+const clock=new THREE.Clock();(function animate(){requestAnimationFrame(animate);const t=clock.getElapsedTime();points.rotation.y=t*.06;points.rotation.x=Math.sin(t*.15)*.08+ty*.25;points.rotation.z=tx*.15;camera.position.x+=(tx*4-camera.position.x)*.03;camera.position.y+=(-ty*4-camera.position.y)*.03;camera.lookAt(scene.position);renderer.render(scene,camera);})();
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});
+gsap.registerPlugin(ScrollTrigger);
+document.querySelectorAll('.reveal').forEach(el=>{gsap.fromTo(el,{y:60,opacity:0},{y:0,opacity:1,duration:1,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 88%'}});});
+document.querySelectorAll('.skill-fill').forEach(bar=>{gsap.to(bar,{width:bar.dataset.w,duration:1.4,ease:'power2.out',scrollTrigger:{trigger:bar,start:'top 90%'}});});
+document.querySelectorAll('.counter').forEach(el=>{ScrollTrigger.create({trigger:el,start:'top 90%',once:true,onEnter:()=>{const target=+el.dataset.target;const obj={v:0};gsap.to(obj,{v:target,duration:2,ease:'power2.out',onUpdate:()=>el.textContent=Math.floor(obj.v).toLocaleString()});}});});
+document.querySelectorAll('.tilt').forEach(card=>{card.addEventListener('mousemove',e=>{const r=card.getBoundingClientRect();const x=e.clientX-r.left,y=e.clientY-r.top;card.style.setProperty('--mx',x+'px');card.style.setProperty('--my',y+'px');const rX=((y/r.height)-.5)*-8;const rY=((x/r.width)-.5)*8;card.style.transform=`perspective(900px) rotateX(${rX}deg) rotateY(${rY}deg) scale(1.02)`;});card.addEventListener('mouseleave',()=>{card.style.transform='perspective(900px) rotateX(0) rotateY(0) scale(1)';});});
+document.querySelectorAll('.magnet').forEach(btn=>{btn.addEventListener('mousemove',e=>{const r=btn.getBoundingClientRect();btn.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.25}px, ${(e.clientY-r.top-r.height/2)*.35}px)`;});btn.addEventListener('mouseleave',()=>btn.style.transform='translate(0,0)');});
+document.getElementById('wa-form').addEventListener('submit',e=>{e.preventDefault();const name=document.getElementById('wa-name').value.trim();const msg=document.getElementById('wa-msg').value.trim();const text=encodeURIComponent(`Hi Austine! My name is ${name}. ${msg}`);window.open(`https://wa.me/2349119329899?text=${text}`,'_blank');});
+</script>
+</body>
+</html>
