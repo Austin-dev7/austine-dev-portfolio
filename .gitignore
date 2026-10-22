@@ -12,3 +12,4 @@ npm-debug.log*
 # If you later use node inside this folder
 node_modules/
 dist/
+.vercel

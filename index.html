@@ -3,18 +3,18 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Austine Dev7 | Creative Developer</title>
-<meta name="description" content="Austine Dev7 — Creative Developer building fast web experiences with Python, JavaScript and modern frontend tools." />
+<title>Austine Dev7 | Creative Developer</title>
+<meta name="description" content="Austine Dev7 Creative Developer building fast web experiences with Python, JavaScript and modern frontend tools." />
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script> 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&family=Space+Grotesk:wght@400;600;700&display=swap');
 :root { --red: #e63946; }
 html { scroll-behavior: auto; } body { font-family: 'Montserrat', sans-serif; background: #0a0a0f; color: #fff; overflow-x: hidden; cursor: none; }
-h1,h2,h3 { font-family: 'Space Grotesk', sans-serif; }
-::selection { background: var(--red); color: #fff; }
+h1,h2,h3 { font-family: 'Space Grotesk', sans-serif; } 
+::selection { background: var(--red); color: #fff; } 
 ::-webkit-scrollbar { width: 6px; }::-webkit-scrollbar-track { background: #0a0a0f; }::-webkit-scrollbar-thumb { background: var(--red); border-radius: 3px; }
 #cursor { position: fixed; width: 12px; height: 12px; border-radius: 50%; background: var(--red); pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); mix-blend-mode: difference; }
 #cursor-ring { position: fixed; width: 38px; height: 38px; border-radius: 50%; border: 1.5px solid rgba(230,57,70,.6); pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); }
@@ -23,10 +23,10 @@ h1,h2,h3 { font-family: 'Space Grotesk', sans-serif; }
 #preloader { position: fixed; inset: 0; background: #0a0a0f; z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 #load-count { font-family: 'Space Grotesk'; font-size: clamp(4rem, 15vw, 9rem); font-weight: 700; }
 #load-bar { width: 220px; height: 2px; background: #222; margin-top: 20px; overflow: hidden; }#load-bar span { display: block; height: 100%; width: 0%; background: var(--red); }
-.nav-link { position: relative; letter-spacing: 3px; font-weight: 400; font-size: 13px; transition: color.3s; }
+.nav-link { position: relative; letter-spacing: 3px; font-weight: 400; font-size: 13px; transition: color.3s; }   
 .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -6px; left: 0; background: var(--red); transition: width.35s cubic-bezier(.65,0,.35,1); }
 .nav-link:hover { color: var(--red); }.nav-link:hover::after,.nav-active::after { width: 100%; }
-#hero-canvas { position: absolute; inset: 0; z-index: 0; }
+#hero-canvas { position: absolute; inset: 0; z-index: 0; }    
 .outline-text { -webkit-text-stroke: 2.5px var(--red); color: transparent; }.glow-red { text-shadow: 0 0 40px rgba(230,57,70,.55); }
 .hero-grad { position: absolute; inset: 0; z-index: 1; pointer-events: none; background: radial-gradient(ellipse at center, transparent 30%, rgba(10,10,15,.85) 100%); }
 .marquee { overflow: hidden; white-space: nowrap; }.marquee-inner { display: inline-block; animation: scrollX 22s linear infinite; }@keyframes scrollX { from { transform: translateX(0); } to { transform: translateX(-50%); } }
@@ -35,16 +35,19 @@ h1,h2,h3 { font-family: 'Space Grotesk', sans-serif; }
 .project-num { font-family: 'Space Grotesk'; font-size: 4.5rem; font-weight: 700; opacity:.12; line-height: 1; }
 .banner { height: 170px; display: flex; align-items: center; justify-content: center; font-size: 4rem; position: relative; overflow: hidden; }
 .banner::before { content:''; position:absolute; inset:0; background-image: radial-gradient(rgba(255,255,255,.14) 1px, transparent 1px); background-size: 18px 18px; }
-.banner span { position: relative; filter: drop-shadow(0 8px 20px rgba(0,0,0,.5)); }
-.banner-b1 { background: linear-gradient(135deg,#7f1d1d,#e63946 60%,#ff8fa3); }.banner-b2 { background: linear-gradient(135deg,#78350f,#f59e0b 60%,#fde68a); }
-.banner-b3 { background: linear-gradient(135deg,#1e3a8a,#3b82f6 60%,#93c5fd); }.banner-b4 { background: linear-gradient(135deg,#0c4a6e,#0ea5e9 60%,#a5f3fc); }
-.banner-b5 { background: linear-gradient(135deg,#4c1d95,#8b5cf6 60%,#c4b5fd); }.banner-b6 { background: linear-gradient(135deg,#14532d,#22c55e 60%,#86efac); }
+.banner span { position: relative; filter: drop-shadow(0 8px 20px rgba(0,0,0,.5)); }   
+.banner-b1 { background: linear-gradient(135deg,#7f1d1d,#e63946 60%,#ff8fa3); }
+.banner-b2 { background: linear-gradient(135deg,#1a0a0a,#e63946 60%,#7f1d1d); }
+.banner-b3 { background: linear-gradient(135deg,#0f0f0f,#e63946 40%,#ff4d5e); }  
+.banner-b4 { background: linear-gradient(135deg,#1a0a0a,#991b1b 60%,#e63946); }
+.banner-b5 { background: linear-gradient(135deg,#0f0f0f,#e63946 50%,#b91c1c); }
+.banner-b6 { background: linear-gradient(135deg,#1a0a0a,#e63946 60%,#450a0a); } 
 .magnet { display: inline-block; transition: transform.2s ease-out; }.reveal { opacity: 0; }
-.skill-fill { width: 0%; background: linear-gradient(90deg, var(--red), #ff7b8a); }
+.skill-fill { width: 0%; background: linear-gradient(90deg, var(--red), #ff7b8a); } 
 .glow-input { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.12); transition: border-color.3s, box-shadow.3s; }
 .glow-input:focus { outline: none; border-color: var(--red); box-shadow: 0 0 0 3px rgba(230,57,70,.18); }
 #mobile-menu { transition: opacity.35s ease, visibility.35s; }
-.melt-wrap { position: relative; display: inline-block; overflow: visible; }
+.melt-wrap { position: relative; display: inline-block; overflow: visible; } 
 .melt-chrome { position: relative; background: linear-gradient(110deg, #fff 0%, #fff 25%, #e63946 30%, #ff8fa3 35%, #fff 40%, #fff 60%, #e63946 70%, #fff 75%, #fff 100%); background-size: 300% auto; -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-stroke: 2.8px transparent; animation: chromeFlow 3s linear infinite; filter: drop-shadow(0 0 20px rgba(230,57,70,.7)) drop-shadow(0 0 50px rgba(230,57,70,.35)); }
 .melt-chrome::before { content: attr(data-text); position: absolute; left: 0; top: 0; width: 100%; -webkit-text-stroke: 3px var(--red); color: transparent; filter: blur(1px); opacity:.8; z-index: -1; }
 .melt-chrome::after { content: attr(data-text); position: absolute; left: 2px; top: 1px; width: 100%; -webkit-text-stroke: 3px rgba(255,255,255,.15); color: transparent; z-index: -2; animation: glitchMelt.25s infinite linear alternate-reverse; }
@@ -58,10 +61,10 @@ h1,h2,h3 { font-family: 'Space Grotesk', sans-serif; }
 @keyframes smokeUp { 0% { transform: translateY(0) translateX(0) scale(.5); opacity: 0; } 15% { opacity:.6; } 100% { transform: translateY(-120px) translateX(20px) scale(2.5); opacity: 0; } }
 .magic-build { background: linear-gradient(90deg, #fff, #e63946, #ff8fa3, #e63946, #fff); background-size: 200% auto; -webkit-background-clip: text; background-clip: text; color: transparent; animation: chromeFlow 3.5s linear infinite; filter: drop-shadow(0 0 20px rgba(230,57,70,.6)); }
 .red-letter { color: var(--red); -webkit-text-fill-color: var(--red); -webkit-background-clip: initial; background-clip: initial; background: none; text-shadow: 0 0 20px rgba(230,57,70,.8); }
-.contact-box { background: #fff; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,.06); padding: 22px; display: flex; align-items: center; gap: 18px; transition: all.35s cubic-bezier(.65,0,.35,1); cursor: pointer; }
-.contact-box:hover { filter: brightness(.92); transform: translateY(-6px) scale(.98); box-shadow: 0 20px 50px rgba(0,0,0,.14); opacity:.9; }
+.contact-box { background: #15151f; border: 1px solid rgba(255,255,255,.08); border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,.3); padding: 22px; display: flex; align-items: center; gap: 18px; transition: all.35s cubic-bezier(.65,0,.35,1); cursor: pointer; }
+.contact-box:hover { border-color: rgba(230,57,70,.4); transform: translateY(-6px); box-shadow: 0 20px 50px rgba(0,0,0,.4); }
 .contact-icon { width: 54px; height: 54px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
-</style>
+</style>   
 <base target="_blank">
 </head>
 <body class="antialiased">
@@ -82,7 +85,7 @@ h1,h2,h3 { font-family: 'Space Grotesk', sans-serif; }
     <h2 class="hero-el text-4xl md:text-6xl lg:text-7xl font-bold mb-1 h-[1.2em]"><span id="line1"></span><span id="caret1" class="animate-pulse text-[#e63946]">|</span></h2>
     <h2 class="hero-el text-4xl md:text-6xl lg:text-7xl font-bold mb-3 h-[1.2em]"><span id="line2"></span><span id="caret2" class="animate-pulse text-[#e63946] hidden">|</span></h2>
     <h1 class="hero-el text-6xl md:text-8xl lg:text-9xl font-extrabold mb-4 h-[1.15em] melt-wrap whitespace-nowrap"><span id="line3"></span><span id="magic-austine" class="melt-chrome hidden font-extrabold" data-text="AUSTINE">AUSTINE</span><span id="caret3" class="animate-pulse text-[#e63946]">|</span><div class="drips" id="drips-austine"></div><div class="smoke" id="smoke-austine"></div></h1>
-    <p class="hero-el max-w-xl text-gray-400 mb-10 leading-relaxed">I build <span class="text-white font-semibold">fast, immersive web experiences</span> — from algorithm-powered engines to real-time data apps. Python in the back of my mind, pixels in the front.</p>
+    <p class="hero-el max-w-xl text-gray-400 mb-10 leading-relaxed">I build <span class="text-white font-semibold">fast, immersive web experiences</span> from algorithm-powered engines to real-time data apps. Python in the back of my mind, pixels in the front.</p>
     <div class="hero-el flex flex-wrap gap-5"><a href="#projects" class="nav-scroll magnet border-2 border-[#e63946] px-10 py-4 tracking-widest font-semibold hover:bg-[#e63946] transition-colors duration-300">VIEW MY WORK</a><a href="#contact" class="nav-scroll magnet px-10 py-4 tracking-widest font-semibold text-gray-300 hover:text-[#e63946] transition-colors duration-300">GET IN TOUCH →</a></div>
   </div>
   <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 text-gray-500 text-xs tracking-widest">SCROLL<div class="w-[1px] h-12 bg-gradient-to-b from-[#e63946] to-transparent animate-pulse"></div></div>
@@ -164,11 +167,11 @@ h1,h2,h3 { font-family: 'Space Grotesk', sans-serif; }
   <form id="wa-form" class="reveal grid gap-5 text-left max-w-2xl mx-auto"><input type="text" id="wa-name" placeholder="Your Name" required class="glow-input rounded-lg px-5 py-4 w-full" /><input type="text" id="wa-msg" placeholder="Your Message (e.g. I have a project for you)" required class="glow-input rounded-lg px-5 py-4 w-full" /><button type="submit" class="magnet bg-[#e63946] hover:bg-[#c92a35] transition-colors py-4 rounded-lg font-bold tracking-widest flex items-center justify-center gap-3"><span class="text-xl">💬</span> SEND VIA WHATSAPP</button></form>
 </section>
 
-<section class="py-16 px-6 lg:px-14 max-w-7xl mx-auto bg-[#f5f5f7]">
+<section class="py-16 px-6 lg:px-14 max-w-7xl mx-auto bg-[#0d0d14] border-t border-white/5">
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    <div class="contact-box"><div class="contact-icon bg-[#fff0e6]">📞</div><div><p class="text-gray-900 font-semibold">Phone</p><p class="text-sm text-gray-500">+234 911 932 9899</p></div></div>
-    <div class="contact-box"><div class="contact-icon bg-[#e6f0ff]">✉️</div><div><p class="text-gray-900 font-semibold">Email</p><p class="text-[12px] text-gray-500 break-all">nwobiaugustineebuka@gmail.com</p></div></div>
-    <div class="contact-box"><div class="contact-icon bg-[#fff7e0]">📍</div><div><p class="text-gray-900 font-semibold">Address</p><p class="text-sm text-gray-500">Lagos, Nigeria</p></div></div>
+    <div class="contact-box"><div class="contact-icon bg-[#e63946]/20 text-[#e63946]">📞</div><div><p class="text-white font-semibold">Phone</p><p class="text-sm text-gray-400">+234 911 932 9899</p></div></div>
+    <div class="contact-box"><div class="contact-icon bg-[#e63946]/20 text-[#e63946]">✉️</div><div><p class="text-white font-semibold">Email</p><p class="text-[12px] text-gray-400 break-all">nwobiaugustineebuka@gmail.com</p></div></div>
+    <div class="contact-box"><div class="contact-icon bg-[#e63946]/20 text-[#e63946]">📍</div><div><p class="text-white font-semibold">Address</p><p class="text-sm text-gray-400">Lagos, Nigeria</p></div></div>
   </div>
 </section>
 
@@ -222,5 +225,5 @@ document.querySelectorAll('.tilt').forEach(card=>{card.addEventListener('mousemo
 document.querySelectorAll('.magnet').forEach(btn=>{btn.addEventListener('mousemove',e=>{const r=btn.getBoundingClientRect();btn.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.25}px, ${(e.clientY-r.top-r.height/2)*.35}px)`;});btn.addEventListener('mouseleave',()=>btn.style.transform='translate(0,0)');});
 document.getElementById('wa-form').addEventListener('submit',e=>{e.preventDefault();const name=document.getElementById('wa-name').value.trim();const msg=document.getElementById('wa-msg').value.trim();const text=encodeURIComponent(`Hi Austine! My name is ${name}. ${msg}`);window.open(`https://wa.me/2349119329899?text=${text}`,'_blank');});
 </script>
-</body>
-</html>
+</body> 
+</html
